@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="#" method="post" id="loginForm" >
+    <!-- 用户名：<input type="text" name="username"><br> -->
+    密  码：<input type="password" name="pazzword" id="pazzword"><br>
+    <button type="button" onclick="checkForm()">提交</button>
+</form>
+
+<script src="./js/jquery-1.11.3.min.js"></script>
+<script src="./CryptoJS/rollups/aes.js"></script>
+<!-- 加密时需引入 pad-zeropadding.js -->
+<script src="./CryptoJS/components/pad-zeropadding-min.js"></script>
+<script type="text/javascript">
+
+
+  function checkForm(){
+      var key = "1234567812345678";
+      var iv = "1234567812345678";
+      var pazzword = $("#pazzword").val();
+
+      // aes 加密
+      // pazzword = encrypt(pazzword,key,iv);
+      pazzword = encrypt(pazzword,key,iv);
+      $("#pazzword").val(pazzword);
+      if(pazzword.length == 24){
+          alert(pazzword + "解密后：" + decrypt(pazzword,key,iv));
+          $("#loginForm").submit();
+      }
+  }
+
+  // 加密
+  function encrypt(data,key,iv) { //key,iv：16位的字符串
+    //   var key1  = CryptoJS.enc.Latin1.parse(key);
+    //   var iv1   = CryptoJS.enc.Latin1.parse(iv);
+
+    //   var en_str = CryptoJS.AES.encrypt(data, key1,{
+    //       iv : iv1,
+    //       mode : CryptoJS.mode.CBC,
+    //       padding : CryptoJS.pad.ZeroPadding
+    //   }).toString();
+    // //   var base64_en_str = CryptoJS.enc.Base64.stringify(en_str)
+    //   return en_str
+
+    var c = CryptoJS.enc.Utf8.parse(key)
+      , d = CryptoJS.enc.Utf8.parse(iv)
+      , e = CryptoJS.enc.Utf8.parse(data)
+      , f = CryptoJS.AES.encrypt(e, c, {
+        iv: d,
+        mode: CryptoJS.mode.CBC
+    });
+    return f.toString()
+  }
+  // 解密
+  function decrypt(data,key,iv){ //key,iv：16位的字符串
+      var key1  = CryptoJS.enc.Latin1.parse(key);
+      var iv1   = CryptoJS.enc.Latin1.parse(iv);
+      var decrypted=CryptoJS.AES.decrypt(data,key1,{
+          iv : iv1,
+          mode : CryptoJS.mode.CBC,
+          padding : CryptoJS.pad.ZeroPadding
+      });
+      return decrypted.toString(CryptoJS.enc.Utf8);
+  }
+
+
+  function encrypt2(params,key,iv) {
+            var key = CryptoJS.enc.Utf8.parse(key);
+            var iv = CryptoJS.enc.Hex.parse(iv);
+            var src = CryptoJS.enc.Utf8.parse(params);
+            var encrypted = CryptoJS.AES.encrypt(src, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                // padding: CryptoJS.pad.Pkcs7
+                padding: CryptoJS.pad.ZeroPadding
+            });
+            var encryptStr = encrypted.ciphertext;
+            return CryptoJS.enc.Hex.stringify(encryptStr);
+        }
+ 
+        function decode2(data,key,iv) {
+            var key1 = CryptoJS.enc.Utf8.parse(key);
+            var iv1 = CryptoJS.enc.Hex.parse(iv);
+            var s = CryptoJS.enc.Hex.parse(data);
+            var src1 = CryptoJS.enc.Base64.stringify(s);
+            var encrypted1 = CryptoJS.AES.decrypt(src1, key1, {
+                iv: iv1,
+                mode: CryptoJS.mode.CBC,
+                // padding: CryptoJS.pad.Pkcs7
+                padding: CryptoJS.pad.ZeroPadding
+            });
+            console.log(encrypted1.toString(CryptoJS.enc.Utf8));
+            return encrypted1.toString(CryptoJS.enc.Utf8);
+        }
+
+
+</script>
+</body>
+
+</html>
