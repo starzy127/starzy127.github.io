@@ -38,10 +38,11 @@
       // aes 加密
 
     var en_pd_str = encrypt(pd_str,key,iv);
-    pazzword_input.value = en_pd_str;
+    
     //   $("#pazzword").val(en_pd_str)
       if(en_pd_str.length == 24){
         //   alert(pazzword + "解密后：" + decrypt(pazzword,key,iv));
+		pazzword_input.value = en_pd_str;
         var flag = copyText(en_pd_str);
         txt = "复制成功："+en_pd_str;
         if (!flag)txt = '复制失败';
