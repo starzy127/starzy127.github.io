@@ -6,6 +6,45 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GetKey</title>
+  <style>
+
+.button {
+    position: relative;
+    background-color: #ffffff;
+	border:2px solid #008cba;
+    border-radius:8px;
+    font-size: 18px;
+    color:  #87cefa;
+    padding: 10px 20px;
+    margin: 4px 2px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+ 
+.button:after {
+    content: "";
+    background: #a9a9a9;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+ 
+.button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+  </style>
 </head>
 <body>
     <!-- <p> -->
@@ -21,7 +60,7 @@
     <button type="button" onclick="checkForm()">生成密钥</button>
 <!-- </form> -->
 
-<!--<script src="./js/jquery-1.11.3.min.js"></script>-->
+<!-- <script src="./js/jquery-1.11.3.min.js"></script> -->
 <script src="./CryptoJS/rollups/aes.js"></script>
 <!-- 加密时需引入 pad-zeropadding.js -->
 <!-- <script src="./CryptoJS/components/pad-zeropadding-min.js"></script> -->
@@ -38,11 +77,10 @@
       // aes 加密
 
     var en_pd_str = encrypt(pd_str,key,iv);
-    
     //   $("#pazzword").val(en_pd_str)
-      if(en_pd_str.length == 24){
+    if(en_pd_str.length%4 == 0){
+        pazzword_input.value = en_pd_str;
         //   alert(pazzword + "解密后：" + decrypt(pazzword,key,iv));
-		pazzword_input.value = en_pd_str;
         var flag = copyText(en_pd_str);
         txt = "复制成功："+en_pd_str;
         if (!flag)txt = '复制失败';
@@ -50,7 +88,10 @@
         alert(txt);
         //   $("#loginForm").submit();
         // copyToClipboard(pazzword)
+      }else{
+        alert('加解密失败');
       }
+
   }
   function copyText(text) {
             var textarea = document.createElement("textarea"); //创建input对象
